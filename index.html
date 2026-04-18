@@ -3,129 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevOps CI/CD Pipeline</title>
+<title>DevOps CI/CD Project</title>
 
 <style>
 
-/* GLOBAL */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Background Animation */
 body {
+    margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #0f172a, #020617);
+    background: linear-gradient(-45deg, #0f172a, #020617, #0ea5e9, #22c55e);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
     color: #fff;
-    overflow-x: hidden;
 }
 
-/* BACKGROUND GLOW */
-body::before {
-    content: "";
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: #22c55e;
-    filter: blur(200px);
-    top: -100px;
-    left: -100px;
-    opacity: 0.3;
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
 }
 
-/* NAVBAR */
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 25px 60px;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 50px;
+    backdrop-filter: blur(10px);
 }
 
 .logo {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
     color: #38bdf8;
-    letter-spacing: 1px;
 }
 
-/* HERO */
+/* Hero */
 .hero {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 80px;
 }
 
 .hero h1 {
-    font-size: 60px;
-    background: linear-gradient(90deg, #38bdf8, #22c55e);
+    font-size: 52px;
+    background: linear-gradient(to right, #38bdf8, #22c55e);
     -webkit-background-clip: text;
     color: transparent;
-    animation: fadeIn 2s ease;
 }
 
 .hero p {
-    margin-top: 15px;
-    color: #cbd5e1;
-    font-size: 18px;
+    color: #cbd5f5;
+    margin-top: 10px;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-20px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-/* BUTTON */
+/* Buttons */
 .btn {
-    margin-top: 25px;
-    padding: 14px 30px;
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 30px;
     border: none;
-    border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
-    background: linear-gradient(90deg, #38bdf8, #22c55e);
+    background: linear-gradient(to right, #38bdf8, #22c55e);
     color: #000;
     transition: 0.3s;
-    box-shadow: 0 0 20px rgba(56,189,248,0.3);
 }
 
 .btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(34,197,94,0.6);
 }
 
-/* GRID */
+/* Cards */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 60px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 60px;
 }
 
-/* CARD */
 .card {
     background: rgba(255,255,255,0.05);
+    margin: 15px;
     padding: 30px;
+    width: 260px;
     border-radius: 20px;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.1);
     transition: 0.4s;
-    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    background: rgba(255,255,255,0.08);
+    transform: translateY(-10px) scale(1.05);
 }
 
-/* STATUS */
+/* Status */
 .status {
     text-align: center;
-    margin: 40px 0;
+    margin-top: 50px;
 }
 
 .badge {
-    padding: 15px 35px;
+    padding: 15px 30px;
     background: #22c55e;
     border-radius: 50px;
     font-weight: bold;
@@ -135,17 +112,16 @@ body::before {
 
 @keyframes pulse {
     0% {box-shadow: 0 0 0 0 rgba(34,197,94,0.7);}
-    70% {box-shadow: 0 0 0 25px rgba(34,197,94,0);}
+    70% {box-shadow: 0 0 0 20px rgba(34,197,94,0);}
     100% {box-shadow: 0 0 0 0 rgba(34,197,94,0);}
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
     text-align: center;
-    padding: 30px;
+    margin-top: 100px;
+    padding: 20px;
     color: #94a3b8;
-    margin-top: 80px;
-    border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 </style>
@@ -154,31 +130,31 @@ body::before {
 <body>
 
 <div class="navbar">
-    <div class="logo">🚀 DevOps CI/CD</div>
-    <div>Docker • AWS • GitHub Actions</div>
+    <div class="logo">🚀 DevOps Pipeline</div>
+    <div>CI/CD | Docker | AWS</div>
 </div>
 
 <div class="hero">
-    <h1>Automated DevOps Pipeline</h1>
-    <p>Code → Build → Test → Deploy | Fully CI/CD Powered System</p>
-    <button class="btn">🚀 View Live Deployment</button>
+    <h1>Fully Automated DevOps Pipeline</h1>
+    <p>Build → Test → Deploy | Continuous Delivery in Action</p>
+    <button class="btn">🚀 Live Deployment</button>
 </div>
 
 <div class="grid">
     <div class="card">🐳 Docker Containerization</div>
-    <div class="card">⚙️ GitHub Actions CI/CD</div>
     <div class="card">☁️ AWS EC2 Deployment</div>
+    <div class="card">⚙️ GitHub Actions CI/CD</div>
     <div class="card">🔐 Secure SSH Automation</div>
     <div class="card">📦 Auto Image Build & Push</div>
-    <div class="card">🔥 Zero-Downtime Deployments</div>
+    <div class="card">🔥 Real-time Deployment</div>
 </div>
 
 <div class="status">
-    <div class="badge">✅ Pipeline Successfully Running</div>
+    <div class="badge">✅ Pipeline Running Successfully</div>
 </div>
 
 <div class="footer">
-    💻 Built with ❤️ by DevOps Engineer | Docker + AWS + GitHub Actions
+    💻 Built by DevOps Engineer | CI/CD Automation Project 🚀
 </div>
 
 </body>
