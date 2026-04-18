@@ -30,7 +30,7 @@ jobs:
     - name: Push Docker Image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
 
-    # ☁️ Step 6: Deploy to EC2 (SMART REPLACE)
+    # ☁️ Step 6: Deploy to EC2 (ULTIMATE FIX)
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -39,14 +39,17 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
+          echo "Pull latest image"
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
 
-          # Check if container exists
-          if [ $(sudo docker ps -aq -f name=devops-app) ]; then
-            echo "Stopping old container..."
-            sudo docker stop devops-app || true
-            sudo docker rm devops-app || true
-          fi
+          echo "Stop all running containers"
+          sudo docker stop $(sudo docker ps -q) || true
 
-          echo "Starting new container..."
+          echo "Remove all containers"
+          sudo docker rm $(sudo docker ps -aq) || true
+
+          echo "Free port 80"
+          sudo fuser -k 80/tcp || true
+
+          echo "Run new container"
           sudo docker run -d -p 80:80 --name devops-app ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
