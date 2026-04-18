@@ -34,7 +34,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
-          sudo docker pull $DOCKER_USERNAME/devops-app
+          sudo docker pull awaisdevops/devops-app
           sudo docker stop devops-app || true
           sudo docker rm devops-app || true
-          sudo docker run -d -p 80:80 --name devops-app $DOCKER_USERNAME/devops-app
+          sudo docker run -d -p 80:80 --name devops-app YOUR_DOCKER_USERNAME/devops-app
