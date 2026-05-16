@@ -3,180 +3,1238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DevOps CI/CD Automation Dashboard - Monitor builds, deployments, and infrastructure">
+<meta name="theme-color" content="#020617">
 <title>DevOps Dashboard Pro</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:#020617;
-    color:#fff;
-    transition:0.5s;
+:root {
+    --bg-dark: #020617;
+    --bg-light: #f1f5f9;
+    --text-dark: #fff;
+    --text-light: #0f172a;
+    --card-bg-dark: rgba(255,255,255,0.05);
+    --card-bg-light: rgba(0,0,0,0.05);
+    --card-border-dark: rgba(255,255,255,0.1);
+    --card-border-light: rgba(0,0,0,0.1);
+    --accent-1: #38bdf8;
+    --accent-2: #22c55e;
+    --accent-3: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --warning: #f59e0b;
 }
 
-/* LIGHT MODE */
-body.light{
-    background:#f1f5f9;
-    color:#000;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* NAVBAR */
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    padding:20px 60px;
-    backdrop-filter:blur(10px);
+html {
+    scroll-behavior: smooth;
 }
 
-.logo{color:#38bdf8;font-weight:bold;font-size:22px;}
-
-.toggle{
-    cursor:pointer;
-    padding:8px 15px;
-    border-radius:20px;
-    background:#38bdf8;
-    color:#000;
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-dark);
+    min-height: 100vh;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow-x: hidden;
 }
 
-/* HERO */
-.hero{text-align:center;margin-top:80px;}
-
-.hero h1{
-    font-size:55px;
-    background:linear-gradient(90deg,#38bdf8,#22c55e);
-    -webkit-background-clip:text;
-    color:transparent;
+/* ===== LIGHT MODE ===== */
+body.light {
+    background: var(--bg-light);
+    color: var(--text-light);
 }
 
-.hero p{margin-top:10px;color:#94a3b8;}
-
-.btn{
-    margin:10px;
-    padding:12px 25px;
-    border-radius:30px;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-    background:linear-gradient(90deg,#38bdf8,#22c55e);
-    color:#000;
-    transition:0.3s;
+body.light .stat,
+body.light .card {
+    background: var(--card-bg-light);
+    border: 1px solid var(--card-border-light);
+    color: var(--text-light);
 }
 
-.btn:hover{transform:scale(1.1);}
-
-/* STATS */
-.stats{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-top:50px;
+body.light .hero p,
+body.light .footer {
+    color: #64748b;
 }
 
-.stat{
-    margin:20px;
-    padding:20px;
-    background:rgba(255,255,255,0.05);
-    border-radius:15px;
-    width:150px;
-    text-align:center;
+body.light .navbar {
+    background: rgba(241, 245, 249, 0.8);
 }
 
-/* GRID */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    padding:40px 80px;
+body.light .stat-label,
+body.light .card-desc {
+    color: #64748b;
 }
 
-.card{
-    background:rgba(255,255,255,0.05);
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-    transition:0.4s;
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.card:hover{transform:scale(1.05);}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
 
-/* FOOTER */
-.footer{
-    text-align:center;
-    margin-top:80px;
-    padding:20px;
-    color:#64748b;
+::-webkit-scrollbar-thumb {
+    background: var(--accent-1);
+    border-radius: 4px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    backdrop-filter: blur(10px);
+    background: rgba(2, 6, 23, 0.8);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.5s ease;
+}
+
+.logo {
+    color: var(--accent-1);
+    font-weight: bold;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo::before {
+    content: '🚀';
+    font-size: 24px;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.toggle {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    color: #000;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+.toggle:active {
+    transform: scale(0.95);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px var(--success);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== HERO ===== */
+.hero {
+    text-align: center;
+    margin-top: 60px;
+    padding: 0 20px;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: clamp(36px, 5vw, 55px);
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+    letter-spacing: -1px;
+    animation: gradient-shift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hero p {
+    margin-top: 15px;
+    color: #94a3b8;
+    font-size: 18px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 14px 28px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    color: #000;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--accent-1);
+    border: 2px solid var(--accent-1);
+}
+
+.btn-secondary:hover {
+    background: var(--accent-1);
+    color: #000;
+    transform: translateY(-3px);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* ===== PIPELINE VISUALIZATION ===== */
+.pipeline-section {
+    margin: 50px auto;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+.pipeline-title {
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.pipeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.pipeline-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    min-width: 120px;
+}
+
+.stage-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: var(--card-bg-dark);
+    border: 2px solid var(--card-border-dark);
+    transition: all 0.3s ease;
+}
+
+.stage-active .stage-icon {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    animation: stage-glow 2s ease infinite;
+}
+
+@keyframes stage-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
+}
+
+.stage-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.stage-status {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--success);
+}
+
+.stage-pending .stage-status {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.stage-failed .stage-status {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.pipeline-arrow {
+    color: var(--accent-1);
+    font-size: 20px;
+    animation: arrow-flow 1.5s ease infinite;
+}
+
+@keyframes arrow-flow {
+    0%, 100% { opacity: 0.3; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(5px); }
+}
+
+/* ===== STATS ===== */
+.stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.stat {
+    padding: 25px;
+    background: var(--card-bg-dark);
+    border-radius: 20px;
+    min-width: 160px;
+    text-align: center;
+    border: 1px solid var(--card-border-dark);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.stat:hover::before {
+    transform: scaleX(1);
+}
+
+.stat-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stat-label {
+    margin-top: 5px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-change {
+    font-size: 12px;
+    margin-top: 5px;
+    color: var(--success);
+}
+
+.stat-change.negative {
+    color: var(--danger);
+}
+
+/* ===== LIVE CHART ===== */
+.chart-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.chart-container {
+    background: var(--card-bg-dark);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--card-border-dark);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+#pipelineChart {
+    width: 100%;
+    height: 200px;
+}
+
+/* ===== TECH STACK ===== */
+.section-title {
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 60px 0 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 0 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--card-bg-dark);
+    padding: 35px;
+    border-radius: 20px;
+    text-align: center;
+    transition: all 0.4s ease;
+    border: 1px solid var(--card-border-dark);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border-color: var(--accent-1);
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+.card-status {
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--success);
+}
+
+/* ===== ACTIVITY LOG ===== */
+.activity-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.activity-container {
+    background: var(--card-bg-dark);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--card-border-dark);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--card-border-dark);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.activity-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.activity-icon.success { background: rgba(34, 197, 94, 0.2); }
+.activity-icon.warning { background: rgba(245, 158, 11, 0.2); }
+.activity-icon.info { background: rgba(56, 189, 248, 0.2); }
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    margin-top: 80px;
+    padding: 30px 20px;
+    color: #64748b;
+    border-top: 1px solid var(--card-border-dark);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: var(--accent-1);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--accent-2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .grid {
+        padding: 0 20px;
+    }
+    
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .stat {
+        min-width: 140px;
+        padding: 20px;
+    }
+    
+    .pipeline-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .pipeline-arrow {
+        transform: rotate(90deg);
+    }
+}
+
+/* ===== LOADING ANIMATION ===== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--card-border-dark);
+    border-top-color: var(--accent-1);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== TOAST NOTIFICATIONS ===== */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: var(--card-bg-dark);
+    border: 1px solid var(--card-border-dark);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toast-in 0.3s ease;
+    max-width: 300px;
+}
+
+.toast.success { border-left: 3px solid var(--success); }
+.toast.error { border-left: 3px solid var(--danger); }
+.toast.info { border-left: 3px solid var(--accent-1); }
+
+@keyframes toast-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-    <div class="logo">🚀 DevOps Pro</div>
-    <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loader">
+    <div class="spinner"></div>
 </div>
 
-<div class="hero">
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- NAVBAR -->
+<<nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="logo">DevOps Pro</div>
+    <div class="nav-controls">
+        <div class="status-indicator" aria-label="System online"></div>
+        <button class="toggle" onclick="toggleMode()" aria-label="Toggle dark/light mode">
+            <span id="modeIcon">🌙</span>
+            <span id="modeText">Dark</span>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<<header class="hero">
     <h1>CI/CD Automation Dashboard</h1>
-    <p>Build → Test → Deploy | Fully Automated Pipeline</p>
+    <p>Build → Test → Deploy | Fully Automated Pipeline with Real-time Monitoring</p>
+    
+    <div class="hero-buttons">
+        <a href="https://github.com/awais-devops/devops-project1" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            🔗 View Code
+        </a>
+        <a href="http://54.169.215.181/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+            🌐 Live Demo
+        </a>
+    </div>
+</header>
 
-    <!-- BUTTONS -->
-    <a href="https://github.com/awais-devops/devops-project1" target="_blank">
-        <button class="btn">🔗 View Code</button>
-    </a>
-
-    <a href="http://54.169.215.181/" target="_blank">
-        <button class="btn">🌐 Live Demo</button>
-    </a>
-</div>
+<!-- PIPELINE VISUALIZATION -->
+<section class="pipeline-section" aria-label="Deployment pipeline">
+    <div class="pipeline-title">Live Pipeline Status</div>
+    <div class="pipeline-container" id="pipeline">
+        <div class="pipeline-stage stage-active" data-stage="build">
+            <div class="stage-icon">📦</div>
+            <div class="stage-label">Build</div>
+            <div class="stage-status">Running</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage stage-pending" data-stage="test">
+            <div class="stage-icon">🧪</div>
+            <div class="stage-label">Test</div>
+            <div class="stage-status">Queued</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage stage-pending" data-stage="deploy">
+            <div class="stage-icon">🚀</div>
+            <div class="stage-label">Deploy</div>
+            <div class="stage-status">Waiting</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage stage-pending" data-stage="monitor">
+            <div class="stage-icon">📊</div>
+            <div class="stage-label">Monitor</div>
+            <div class="stage-status">Idle</div>
+        </div>
+    </div>
+</section>
 
 <!-- STATS -->
-<div class="stats">
-    <div class="stat">
-        <h2 id="builds">0</h2>
-        <p>Builds</p>
+<section class="stats" aria-label="Dashboard statistics">
+    <article class="stat">
+        <div class="stat-icon">🔨</div>
+        <div class="stat-value" id="builds">0</div>
+        <div class="stat-label">Total Builds</div>
+        <div class="stat-change" id="buildChange">↑ 12% this week</div>
+    </article>
+    <article class="stat">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value" id="deploys">0</div>
+        <div class="stat-label">Deployments</div>
+        <div class="stat-change" id="deployChange">↑ 8% this week</div>
+    </article>
+    <article class="stat">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="uptime">99.9%</div>
+        <div class="stat-label">Uptime</div>
+        <div class="stat-change">Last 30 days</div>
+    </article>
+    <article class="stat">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" id="avgTime">4.2m</div>
+        <div class="stat-label">Avg Build Time</div>
+        <div class="stat-change negative" id="timeChange">↓ 15% faster</div>
+    </article>
+</section>
+
+<!-- LIVE CHART -->
+<section class="chart-section">
+    <div class="chart-container">
+        <div class="chart-header">
+            <div class="chart-title">Pipeline Activity (24h)</div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--accent-1)"></div>
+                    <span>Builds</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--accent-2)"></div>
+                    <span>Deploys</span>
+                </div>
+            </div>
+        </div>
+        <canvas id="pipelineChart"></canvas>
     </div>
-    <div class="stat">
-        <h2 id="deploys">0</h2>
-        <p>Deployments</p>
+</section>
+
+<!-- ACTIVITY LOG -->
+<section class="activity-section">
+    <div class="section-title">Recent Activity</div>
+    <div class="activity-container" id="activityLog">
+        <!-- Populated by JS -->
     </div>
-    <div class="stat">
-        <h2 id="uptime">0%</h2>
-        <p>Uptime</p>
-    </div>
-</div>
+</section>
 
 <!-- TECH STACK -->
-<div class="grid">
-    <div class="card">🐳 Docker</div>
-    <div class="card">⚙️ GitHub Actions</div>
-    <div class="card">☁️ AWS EC2</div>
-    <div class="card">🔐 SSH Deployment</div>
-</div>
+<section aria-label="Technology stack">
+    <div class="section-title">Infrastructure Stack</div>
+    <div class="grid">
+        <article class="card" onclick="showToast('Docker containers running smoothly', 'success')">
+            <span class="card-icon">🐳</span>
+            <div class="card-title">Docker</div>
+            <div class="card-desc">Containerized microservices architecture with multi-stage builds</div>
+            <div class="card-status">
+                <span>●</span> 12 Containers Active
+            </div>
+        </article>
+        <article class="card" onclick="showToast('GitHub Actions workflow triggered', 'info')">
+            <span class="card-icon">⚙️</span>
+            <div class="card-title">GitHub Actions</div>
+            <div class="card-desc">Automated CI/CD workflows with matrix builds and caching</div>
+            <div class="card-status">
+                <span>●</span> Workflow #284 Running
+            </div>
+        </article>
+        <article class="card" onclick="showToast('AWS EC2 instances healthy', 'success')">
+            <span class="card-icon">☁️</span>
+            <div class="card-title">AWS EC2</div>
+            <div class="card-desc">Auto-scaling compute instances across multiple availability zones</div>
+            <div class="card-status">
+                <span>●</span> 3 Instances Online
+            </div>
+        </article>
+        <article class="card" onclick="showToast('SSH keys rotated successfully', 'info')">
+            <span class="card-icon">🔐</span>
+            <div class="card-title">SSH Deployment</div>
+            <div class="card-desc">Secure key-based deployment with automated rollback capability</div>
+            <div class="card-status">
+                <span>●</span> Secure Connection
+            </div>
+        </article>
+    </div>
+</section>
 
-<div class="footer">
-    💻 Built by DevOps Engineer | CI/CD Automation 🚀
-</div>
+<!-- FOOTER -->
+<<footer class="footer">
+    <div class="footer-links">
+        <a href="https://github.com/awais-devops" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="#" onclick="showToast('Documentation coming soon!', 'info')">Docs</a>
+        <a href="#" onclick="showToast('Status page: All systems operational', 'success')">Status</a>
+    </div>
+    <p>💻 Built by DevOps Engineer | CI/CD Automation 🚀</p>
+    <p style="margin-top: 10px; font-size: 12px; color: #475569;">Last updated: <span id="lastUpdated">Just now</span></p>
+</footer>
 
 <script>
+// ===== CONFIGURATION =====
+const CONFIG = {
+    updateInterval: 2000,
+    maxBuilds: 9999,
+    chartPoints: 24,
+    activitiesLimit: 10
+};
 
-/* DARK LIGHT MODE */
-function toggleMode(){
-    document.body.classList.toggle("light");
+// ===== STATE MANAGEMENT =====
+let state = {
+    builds: 1247,
+    deploys: 892,
+    isLightMode: false,
+    chartData: {
+        builds: Array(24).fill(0).map(() => Math.floor(Math.random() * 50) + 20),
+        deploys: Array(24).fill(0).map(() => Math.floor(Math.random() * 30) + 10)
+    },
+    activities: [
+        { icon: '🚀', text: 'Production deployment v2.4.1 successful', time: '2 min ago', type: 'success' },
+        { icon: '🧪', text: 'All 42 tests passed in staging environment', time: '5 min ago', type: 'success' },
+        { icon: '📦', text: 'Docker image built: devops-app:latest', time: '8 min ago', type: 'info' },
+        { icon: '⚠️', text: 'High memory usage detected on worker-2', time: '12 min ago', type: 'warning' },
+        { icon: '🔐', text: 'SSL certificate renewed for 90 days', time: '15 min ago', type: 'success' }
+    ]
+};
+
+// ===== UTILITY FUNCTIONS =====
+function $(selector) { return document.querySelector(selector); }
+function $$ (selector) { return document.querySelectorAll(selector); }
+
+// ===== THEME MANAGEMENT =====
+function initTheme() {
+    const saved = localStorage.getItem('devops-theme');
+    if (saved === 'light') {
+        document.body.classList.add('light');
+        state.isLightMode = true;
+        updateThemeUI();
+    }
 }
 
-/* FAKE LIVE STATS (SIMULATION) */
-let builds=0,deploys=0;
+function toggleMode() {
+    state.isLightMode = !state.isLightMode;
+    document.body.classList.toggle('light');
+    localStorage.setItem('devops-theme', state.isLightMode ? 'light' : 'dark');
+    updateThemeUI();
+    showToast(`Switched to ${state.isLightMode ? 'Light' : 'Dark'} mode`, 'info');
+}
 
-setInterval(()=>{
-    builds++;
-    deploys++;
-    document.getElementById("builds").innerText=builds;
-    document.getElementById("deploys").innerText=deploys;
-    document.getElementById("uptime").innerText="99.9%";
-},2000);
+function updateThemeUI() {
+    const icon = $('#modeIcon');
+    const text = $('#modeText');
+    if (state.isLightMode) {
+        icon.textContent = '☀️';
+        text.textContent = 'Light';
+    } else {
+        icon.textContent = '🌙';
+        text.textContent = 'Dark';
+    }
+}
 
+// ===== STATS MANAGEMENT =====
+function updateStats() {
+    // Simulate realistic build increments
+    const buildIncrement = Math.random() > 0.7 ? 1 : 0;
+    const deployIncrement = Math.random() > 0.8 ? 1 : 0;
+    
+    state.builds += buildIncrement;
+    state.deploys += deployIncrement;
+    
+    // Cap at max
+    if (state.builds > CONFIG.maxBuilds) state.builds = CONFIG.maxBuilds;
+    
+    $('#builds').textContent = state.builds.toLocaleString();
+    $('#deploys').textContent = state.deploys.toLocaleString();
+    
+    // Random uptime fluctuation between 99.8% and 99.99%
+    const uptime = (99.8 + Math.random() * 0.19).toFixed(2);
+    $('#uptime').textContent = uptime + '%';
+    
+    // Update avg build time
+    const avgTime = (3.5 + Math.random() * 2).toFixed(1);
+    $('#avgTime').textContent = avgTime + 'm';
+}
+
+// ===== PIPELINE ANIMATION =====
+let pipelineStage = 0;
+const stages = ['build', 'test', 'deploy', 'monitor'];
+const stageNames = ['Building...', 'Testing...', 'Deploying...', 'Monitoring'];
+const stageEmojis = ['📦', '🧪', '🚀', '📊'];
+
+function updatePipeline() {
+    const pipeline = $('#pipeline');
+    const stageEls = $$('.pipeline-stage');
+    
+    stageEls.forEach((el, index) => {
+        el.classList.remove('stage-active', 'stage-pending');
+        
+        if (index === pipelineStage) {
+            el.classList.add('stage-active');
+            el.querySelector('.stage-status').textContent = stageNames[index];
+        } else if (index < pipelineStage) {
+            el.querySelector('.stage-status').textContent = 'Completed ✓';
+            el.querySelector('.stage-status').style.color = 'var(--success)';
+        } else {
+            el.classList.add('stage-pending');
+            el.querySelector('.stage-status').textContent = 'Waiting';
+        }
+    });
+    
+    pipelineStage = (pipelineStage + 1) % stages.length;
+}
+
+// ===== CHART DRAWING =====
+function drawChart() {
+    const canvas = $('#pipelineChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    
+    // Set canvas size
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    
+    const width = rect.width;
+    const height = rect.height;
+    const padding = 40;
+    
+    // Clear
+    ctx.clearRect(0, 0, width, height);
+    
+    // Update data
+    state.chartData.builds.shift();
+    state.chartData.builds.push(Math.floor(Math.random() * 50) + 20);
+    state.chartData.deploys.shift();
+    state.chartData.deploys.push(Math.floor(Math.random() * 30) + 10);
+    
+    // Draw grid
+    ctx.strokeStyle = state.isLightMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = padding + (height - 2 * padding) * (i / 4);
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - padding, y);
+        ctx.stroke();
+    }
+    
+    // Draw lines
+    function drawLine(data, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        ctx.beginPath();
+        const step = (width - 2 * padding) / (data.length - 1);
+        const maxVal = Math.max(...data, ...state.chartData.builds) * 1.2;
+        
+        data.forEach((val, i) => {
+            const x = padding + i * step;
+            const y = height - padding - (val / maxVal) * (height - 2 * padding);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        
+        // Draw points
+        ctx.fillStyle = color;
+        data.forEach((val, i) => {
+            const x = padding + i * step;
+            const y = height - padding - (val / maxVal) * (height - 2 * padding);
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
+    
+    drawLine(state.chartData.builds, '#38bdf8');
+    drawLine(state.chartData.deploys, '#22c55e');
+}
+
+// ===== ACTIVITY LOG =====
+function renderActivities() {
+    const container = $('#activityLog');
+    container.innerHTML = '';
+    
+    state.activities.forEach(activity => {
+        const item = document.createElement('div');
+        item.className = 'activity-item';
+        item.innerHTML = `
+            <div class="activity-icon ${activity.type}">${activity.icon}</div>
+            <div class="activity-content">
+                <div class="activity-text">${activity.text}</div>
+                <div class="activity-time">${activity.time}</div>
+            </div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function addActivity(icon, text, type) {
+    state.activities.unshift({
+        icon, text, time: 'Just now', type
+    });
+    if (state.activities.length > CONFIG.activitiesLimit) {
+        state.activities.pop();
+    }
+    renderActivities();
+}
+
+// ===== TOAST NOTIFICATIONS =====
+function showToast(message, type = 'info') {
+    const container = $('#toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+    toast.innerHTML = `
+        <span>${icons[type] || 'ℹ️'}</span>
+        <span>${message}</span>
+    `;
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'toast-in 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ===== LOADING =====
+function hideLoader() {
+    setTimeout(() => {
+        $('#loader').classList.add('hidden');
+    }, 800);
+}
+
+// ===== UPDATE TIMESTAMP =====
+function updateTimestamp() {
+    const now = new Date();
+    $('#lastUpdated').textContent = now.toLocaleTimeString();
+}
+
+// ===== MAIN LOOP =====
+let intervals = [];
+
+function startSimulation() {
+    // Stats update
+    intervals.push(setInterval(updateStats, CONFIG.updateInterval));
+    
+    // Pipeline animation
+    intervals.push(setInterval(updatePipeline, 3000));
+    
+    // Chart update
+    intervals.push(setInterval(drawChart, 1500));
+    
+    // Random activity
+    intervals.push(setInterval(() => {
+        if (Math.random() > 0.7) {
+            const activities = [
+                { icon: '🚀', text: 'Deployment triggered for feature/auth-v2', type: 'info' },
+                { icon: '✅', text: 'Security scan passed with 0 vulnerabilities', type: 'success' },
+                { icon: '📦', text: 'New container image pushed to registry', type: 'info' },
+                { icon: '⚡', text: 'Build cache hit ratio: 94%', type: 'success' }
+            ];
+            const act = activities[Math.floor(Math.random() * activities.length)];
+            addActivity(act.icon, act.text, act.type);
+        }
+    }, 5000));
+    
+    // Timestamp
+    intervals.push(setInterval(updateTimestamp, 60000));
+}
+
+// Cleanup on page hide
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        intervals.forEach(clearInterval);
+        intervals = [];
+    } else {
+        startSimulation();
+    }
+});
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    renderActivities();
+    drawChart();
+    updatePipeline();
+    updateStats();
+    updateTimestamp();
+    startSimulation();
+    hideLoader();
+    
+    // Initial toast
+    setTimeout(() => {
+        showToast('Dashboard loaded successfully', 'success');
+    }, 1000);
+});
+
+// Handle resize for chart
+window.addEventListener('resize', drawChart);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.key === 't' && e.ctrlKey) {
+        e.preventDefault();
+        toggleMode();
+    }
+});
 </script>
 
 </body>
